@@ -11,12 +11,13 @@
 
         <form @submit.prevent="send">
 
-          <div v-if="error" class="field">
-            <span class="tag is-warning">
-              {{ error }}
-              <button class="delete is-small"></button>
+          <div v-if="info" class="field">
+            <span class="tag is-info">
+              {{ info }}
+              <button class="delete is-small" @click="clear_info"></button>
             </span>
           </div>
+
 
           <div class="field">
             <p class="control has-icons-left">
@@ -60,11 +61,17 @@
             </p>
           </div>
 
-          <div class="field">
+          <div class="field is-grouped">
             <p class="control">
               <button class="button is-outlined is-dark" type="submit">
                 Guardar / Editar
               </button>
+            </p>
+            <p class="control">
+              <a class="button is-outlined is-dark"
+                @click="cancel">
+                Cancelar
+              </a>
             </p>
           </div>
 
@@ -83,12 +90,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="u in lista">
+            <tr v-for="u in usuarios">
               <td>{{u.cedula}}</td>
               <td>{{u.nombre}}</td>
               <td>{{u.grado}}</td>
               <td>
-                <a class="button is-small is-outlined is-dark">Editar</a>
+                <div class="field is-grouped">
+                  <p class="control">
+                    <a class="button is-small is-outlined is-dark"
+                      @click="edit(u)" >Editar</a>
+                  </p>
+                  <p class="control">
+                    <a class="button is-small is-outlined is-dark"
+                      @click="del_usuario(u.cedula)" >Borrar</a>
+                  </p>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -109,23 +125,114 @@
 
 <script>
 
+  import { ApolloM, ApolloQ } from '~assets/Query'
+  import gql from 'graphql-tag'
+
   export default {
+    asyncData () {
+      return ApolloQ({
+        query: gql`
+          query {
+            usuarios {
+              _id
+              cedula
+              nombre
+              grado
+              clave
+            }
+          }
+        ` })
+      .then(res =>
+        ({ usuarios: res.data.usuarios })
+      )
+    },
     data () {
       return {
         cedula: '',
         nombre: '',
         grado: 'null',
         clave: '',
-        error: null,
-        lista: []
+        info: null
       }
     },
     methods: {
       send () {
-
+        if (this.cedula.length > 0 &&
+            this.nombre.length > 0 &&
+            this.grado !== 'null' &&
+            this.clave.length > 0) {
+          ApolloM({
+            mutation: gql`
+                mutation Usuario (
+                  $cedula: String!
+                  $nombre: String!
+                  $grado: String!
+                  $clave: String!
+                ) {
+                  usuario (
+                    cedula: $cedula
+                    nombre: $nombre
+                    grado: $grado
+                    clave: $clave
+                  ) {
+                    _id
+                    cedula
+                    nombre
+                    grado
+                    clave
+                  }
+                }
+              `,
+            variables: {
+              cedula: this.cedula,
+              nombre: this.nombre,
+              grado: this.grado,
+              clave: this.clave
+            } })
+          .then(res => {
+            console.log(res)
+            this.info = 'Operacion Realizada.'
+          })
+        }
+      },
+      edit (u) {
+        this.cedula = u.cedula
+        this.nombre = u.nombre
+        this.grado = u.grado
+        this.clave = u.clave
+      },
+      cancel () {
+        this.cedula = ''
+        this.nombre = ''
+        this.grado = 'null'
+        this.clave = ''
+        this.info = null
+      },
+      clear_info () {
+        this.info = null
+      },
+      del_usuario (cedula) {
+        ApolloM({
+          mutation: gql`
+            mutation Del_Usuario (
+              $cedula: String!
+            ) {
+              del_usuario (
+                cedula: $cedula
+              ) {
+                _id
+              }
+            }
+          `,
+          variables: {
+            cedula
+          } })
+        .then(res => {
+          this.info = 'Operacion Realizada.'
+        })
       }
     },
-    middleware: 'auth',
+    middleware: 'users',
     components: {}
   }
 </script>

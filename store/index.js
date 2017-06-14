@@ -2,12 +2,21 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 const state = {
-  auth: null
+  auth: null,
+  empleados: []
 }
 
 const mutations = {
   SET_AUTH: (state, nuevo) => {
     state.auth = nuevo
+  },
+  SET_EMPLEADOS: (state, lista) => {
+    state.empleados = lista
+  },
+  PUSH_EMPLEADOS: (state, nuevo) => {
+    let array = state.empleados.slice()
+    array.push(nuevo)
+    state.empleados = array
   }
 }
 
@@ -32,6 +41,12 @@ const actions = {
     axios.post('/logout').then(() => {
       commit('SET_AUTH', null)
     })
+  },
+  initEmpleados ({ commit }, { lista }) {
+    commit('SET_EMPLEADOS', lista)
+  },
+  pushEmpleado ({ commit }, { nuevo }) {
+    commit('PUSH_EMPLEADOS', nuevo)
   }
 }
 

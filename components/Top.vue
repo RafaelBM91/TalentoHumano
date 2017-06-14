@@ -24,7 +24,7 @@
               <li v-if="$store.state.auth">
                 <nuxt-link to="/nomina">Nomina</nuxt-link>
               </li>
-              <li v-if="$store.state.auth">
+              <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
                 <nuxt-link to="/users">Usuarios</nuxt-link>
               </li>
               <li v-if="$store.state.auth">

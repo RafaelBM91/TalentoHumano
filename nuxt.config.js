@@ -14,6 +14,10 @@ module.exports = {
     ]
   },
   /*
+  ** Crea plugin para APOLLO
+  */
+  plugins: ['~plugins/ApolloClient','~plugins/VueApolloClient'],
+  /*
   ** Customize the progress-bar color
   */
   loading: { color: '#00D1B2' },
@@ -29,6 +33,7 @@ module.exports = {
   */
   build: {
     extractCSS: true,
+    vendor: ['isomorphic-fetch', 'apollo-client', 'graphql-tag'],
     /*
     ** Run ESLINT on save
     */
