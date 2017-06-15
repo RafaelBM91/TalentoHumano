@@ -27,6 +27,9 @@
               <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
                 <nuxt-link to="/users">Usuarios</nuxt-link>
               </li>
+              <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
+                <nuxt-link to="/config">Configurar</nuxt-link>
+              </li>
               <li v-if="$store.state.auth">
                 <a @click="logout">Salir</a>
               </li>

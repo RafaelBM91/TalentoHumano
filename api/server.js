@@ -5,6 +5,7 @@ const Session = require('express-session');
 const graphQLHTTP = require('express-graphql');
 const MongoDBStore = require('connect-mongodb-session')(Session);
 const uuid = require('uuid');
+var cors = require('cors');
 
 let config = require('../nuxt.config.js');
 const port = process.env.PORT || '3000'
@@ -14,6 +15,7 @@ const { Usuarios } = require('./collection');
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -16,7 +16,7 @@ module.exports = {
   /*
   ** Crea plugin para APOLLO
   */
-  plugins: ['~plugins/ApolloClient','~plugins/VueApolloClient'],
+  plugins: ['~plugins/ApolloClient.js'],
   /*
   ** Customize the progress-bar color
   */

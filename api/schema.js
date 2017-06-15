@@ -67,6 +67,11 @@ const Query = new GraphQLObjectType({
       resolve: (_,{}) =>
         Empleados.find({})
     },
+    saludo: {
+      type: GraphQLString,
+      resolve: (_,{}) =>
+        "Hello Word.!"
+    }
   }
 });
 
