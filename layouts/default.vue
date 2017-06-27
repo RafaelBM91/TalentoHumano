@@ -12,4 +12,14 @@
   }
 </script>
 
-<style></style>
+<style>
+  html {
+    height: 100%;
+  }
+  body {
+    height: 100%;
+    /*background-image: url('/logo_imet.png');
+    background-size: 100%;
+    background-repeat: no-repeat;*/
+  }
+</style>

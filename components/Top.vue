@@ -1,6 +1,6 @@
 <template>
   <div id="Top" class="column is-11">
-    <section class="hero is-dark is-bold">
+    <section id="header" class="hero is-default is-bold">
       <div class="hero-body">
         <div class="container has-text-centered">
           <h1 class="title">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="hero-foot">
-        <nav class="tabs is-boxed">
+        <nav class="tabs is-boxed is-outlined">
           <div class="container">
             <ul>
               <li>
@@ -27,9 +27,9 @@
               <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
                 <nuxt-link to="/users">Usuarios</nuxt-link>
               </li>
-              <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
+              <!-- <li v-if="$store.state.auth && $store.state.auth.grado === 'Administrador'">
                 <nuxt-link to="/config">Configurar</nuxt-link>
-              </li>
+              </li> -->
               <li v-if="$store.state.auth">
                 <a @click="logout">Salir</a>
               </li>
@@ -47,9 +47,17 @@
     methods: {
       logout () {
         this.$store.dispatch('logout')
+        location.reload()
       }
     }
   }
 </script>
 
-<style></style>
+<style>
+  section#header {
+    background-image: url('/logo_imet.png');
+    background-size: 20% 90%;
+    background-repeat: no-repeat;
+    background-position: 0% 2px
+  }
+</style>

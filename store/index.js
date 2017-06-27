@@ -3,7 +3,9 @@ import axios from 'axios'
 
 const state = {
   auth: null,
-  empleados: []
+  empleados: [],
+  nomina: null,
+  nominas_n: 0
 }
 
 const mutations = {
@@ -17,6 +19,12 @@ const mutations = {
     let array = state.empleados.slice()
     array.push(nuevo)
     state.empleados = array
+  },
+  SET_NOMINA: (state, nomina) => {
+    state.nomina = nomina
+  },
+  SET_NOMINAS_N: (state, numero) => {
+    state.nominas_n = numero
   }
 }
 
@@ -47,6 +55,12 @@ const actions = {
   },
   pushEmpleado ({ commit }, { nuevo }) {
     commit('PUSH_EMPLEADOS', nuevo)
+  },
+  set_momina ({ commit }, { nomina }) {
+    commit('SET_NOMINA', nomina)
+  },
+  set_mominas_n ({ commit }, { numero }) {
+    commit('SET_NOMINAS_N', numero)
   }
 }
 

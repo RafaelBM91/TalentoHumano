@@ -6,7 +6,7 @@
           type="text"
           :class="className"
           :readonly="readonly"
-          :value="value"
+          :value="value || initValue"
           :placeholder="placeholder"
           @click="show = !show">
         <span class="icon is-small is-left">
@@ -51,7 +51,7 @@
     props: {
       width: { type: String, default: '238px' },
       readonly: { type: Boolean, default: false },
-      // value: { type: String, default: '' },
+      initValue: { type: String, default: '' },
       format: { type: String, default: 'YYYY-MM-DD' },
       className: { type: String, default: '' },
       placeholder: { type: String, default: 'Fecha' },

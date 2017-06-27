@@ -69,6 +69,7 @@
             this.cedula = ''
             this.clave = ''
             this.error = null
+            location.reload()
           })
           .catch((e) => {
             this.error = e.message

@@ -124,13 +124,11 @@
 </template>
 
 <script>
-
-  import { ApolloM, ApolloQ } from '~assets/Query'
   import gql from 'graphql-tag'
 
   export default {
-    asyncData () {
-      return ApolloQ({
+    created () {
+      this.$apollo.query({
         query: gql`
           query {
             usuarios {
@@ -141,10 +139,9 @@
               clave
             }
           }
-        ` })
-      .then(res =>
-        ({ usuarios: res.data.usuarios })
-      )
+        `
+      })
+      .then(({ data: { usuarios } }) => { this.usuarios = usuarios })
     },
     data () {
       return {
@@ -152,7 +149,8 @@
         nombre: '',
         grado: 'null',
         clave: '',
-        info: null
+        info: null,
+        usuarios: []
       }
     },
     methods: {
@@ -161,7 +159,7 @@
             this.nombre.length > 0 &&
             this.grado !== 'null' &&
             this.clave.length > 0) {
-          ApolloM({
+          this.$apollo.mutate({
             mutation: gql`
                 mutation Usuario (
                   $cedula: String!
@@ -188,7 +186,8 @@
               nombre: this.nombre,
               grado: this.grado,
               clave: this.clave
-            } })
+            }
+          })
           .then(res => {
             console.log(res)
             this.info = 'Operacion Realizada.'
@@ -212,7 +211,7 @@
         this.info = null
       },
       del_usuario (cedula) {
-        ApolloM({
+        this.$apollo.mutate({
           mutation: gql`
             mutation Del_Usuario (
               $cedula: String!
@@ -226,7 +225,8 @@
           `,
           variables: {
             cedula
-          } })
+          }
+        })
         .then(res => {
           this.info = 'Operacion Realizada.'
         })

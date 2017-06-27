@@ -43,7 +43,28 @@ const EmpleadoSCH =  new Schema({
     strict: true,
 });
 
+const NominaSCH =  new Schema({
+    numero: Number,
+    fecha: String,
+    concepto: String,
+    periodo: String
+  },{
+    timestamps: true,
+    strict: true,
+});
+
+const DetalleSCH =  new Schema({
+    nomina: ObjectId,
+    cedula: String,
+    cuenta: []
+  },{
+    timestamps: true,
+    strict: true,
+});
+
 const Usuarios = mongoose.model('usuarios', UsuarioSCH);
 const Empleados = mongoose.model('empleados', EmpleadoSCH);
+const Nominas = mongoose.model('nominas', NominaSCH);
+const Detalles = mongoose.model('detalles', DetalleSCH);
 
-module.exports = { Usuarios, Empleados };
+module.exports = { Usuarios, Empleados, Nominas, Detalles };

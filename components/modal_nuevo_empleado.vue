@@ -17,6 +17,8 @@
                   class="input is-hovered"
                   type="text"
                   v-model="cedula"
+                  v-on:keyup.13="find()"
+                  :disabled="lock"
                   placeholder="Cedula" >
                 <span class="icon is-small is-left">
                   <i class="fa fa-vcard"></i>
@@ -54,6 +56,7 @@
               className="input is-hovered"
               :readonly="true"
               format="YYYY-MM-DD"
+              :initValue="ingreso"
               placeholder="Fecha de Ingreso"
               :callback="(date) => { this.ingreso = date }" ></datepicker>
 
@@ -137,7 +140,6 @@
 
 <script>
   import datepicker from './datepicker'
-  import { ApolloM } from '~assets/Query'
   import gql from 'graphql-tag'
 
   export default {
@@ -154,7 +156,8 @@
         cargo: '',
         salario: '',
         estado: 'null',
-        departamento: 'null'
+        departamento: 'null',
+        lock: false
       }
     },
     methods: {
@@ -167,7 +170,7 @@
             this.salario.length > 0 &&
             this.estado !== 'null' &&
             this.departamento !== 'null') {
-          ApolloM({
+          this.$apollo.mutate({
             mutation: gql`
                 mutation Empleado (
                   $cedula: String!
@@ -219,6 +222,43 @@
           })
         }
       },
+      find () {
+        this.$apollo.query({
+          query: gql`
+            query Empleado (
+              $cedula: String!
+            ) {
+              empleado (
+                cedula: $cedula
+              ) {
+                _id
+                cedula
+                nombre
+                apellido
+                ingreso
+                cargo
+                salario
+                estado
+                departamento
+              }
+            }
+          `,
+          variables: {
+            cedula: this.cedula
+          }
+        })
+        .then(({ data: { empleado } }) => {
+          this.cedula = empleado.cedula
+          this.nombre = empleado.nombre
+          this.apellido = empleado.apellido
+          this.ingreso = empleado.ingreso
+          this.cargo = empleado.cargo
+          this.salario = empleado.salario
+          this.estado = empleado.estado
+          this.departamento = empleado.departamento
+          this.lock = true
+        })
+      },
       cancelar () {
         this.cedula = ''
         this.nombre = ''
@@ -228,6 +268,7 @@
         this.salario = ''
         this.estado = 'null'
         this.departamento = 'null'
+        this.lock = false
       }
     },
     components: {
